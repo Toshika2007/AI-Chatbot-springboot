@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>AI Chatbot</title>
+
+    <link rel="stylesheet" href="/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>AI Chatbot 🤖</h1>
+
+    <button onclick="toggleMode()">
+        🌙 / ☀️
+    </button>
+
+    <br><br>
+
+    <input
+            id="question"
+            type="text"
+            placeholder="Ask anything..."
+            onkeypress="handleEnter(event)"
+    >
+
+    <br><br>
+
+    <button onclick="sendMessage()">
+        Send
+    </button>
+
+    <div id="chat"></div>
+
+</div>
+
+<script>
+
+    async function sendMessage(){
+
+    let input=
+    document.getElementById(
+    "question"
+    );
+
+    let text=
+    input.value.trim();
+
+    if(text===""){
+    return;
+    }
+
+    let chat=
+    document.getElementById(
+    "chat"
+    );
+
+    /* USER MESSAGE */
+
+    chat.innerHTML+=
+    `
+    <div class="user">
+
+    <b>You:</b><br>
+
+    ${text}
+
+    </div>
+    `;
+
+    /* TYPING */
+
+    chat.innerHTML+=
+    `
+    <div
+    class="ai"
+    id="typing"
+    >
+
+    <b>AI:</b><br>
+
+    Typing...
+
+    </div>
+    `;
+
+    input.value="";
+
+    chat.scrollTop=
+    chat.scrollHeight;
+
+    /* FETCH */
+
+    let response=
+    await fetch(
+    "http://localhost:8080/chat",
+    {
+    method:"POST",
+
+    headers:{
+    "Content-Type":
+    "text/plain"
+    },
+
+    body:text
+    }
+    );
+
+    let data=
+    await response.text();
+
+    /* REPLACE TYPING */
+
+    document
+    .getElementById(
+    "typing"
+    )
+    .outerHTML=
+    `
+    <div class="ai">
+
+    <b>AI:</b><br>
+
+    ${data}
+
+    </div>
+    `;
+
+    chat.scrollTop=
+    chat.scrollHeight;
+
+    }
+
+    /* THEME */
+
+    function toggleMode(){
+
+    document.body.classList.toggle(
+    "light"
+    );
+
+    }
+
+    /* ENTER */
+
+    function handleEnter(event){
+
+    if(
+    event.key==="Enter"
+    ){
+
+    sendMessage();
+
+    }
+
+    }
+
+</script>
+
+</body>
+
+</html>

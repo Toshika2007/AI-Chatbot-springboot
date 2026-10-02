@@ -95,17 +95,15 @@
 
     /* FETCH */
 
-    let response=
-    await fetch(
-    "http://localhost:8080/chat",
+  let response =
+await fetch(
+    "/chat",
     {
-    method:"POST",
+        method: "POST",
 
-    headers:{
-    "Content-Type":
-    "text/plain"
-    },
-
+        headers: {
+            "Content-Type": "text/plain"
+        },
     body:text
     }
     );
